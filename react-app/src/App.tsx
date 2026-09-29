@@ -103,20 +103,19 @@ function App() {
     }
 
     function changeOperation(nextOperation: Operation) {
-        if (nextOperation === operation) return;
+        if (nextOperation === operation || isSubmitting) return;
+        clearForm();
+        setOperation(nextOperation);
+    }
+
+    function clearForm() {
+        if (isSubmitting) return;
+
         lookupController.current?.abort();
         setLoadedVisitorId(null);
         setLookupError(null);
-        if (nextOperation === "UPDATE") {
-            setFormData((current) => ({
-                ...current,
-                nome: "",
-                idade: "",
-                areaInteresse: "",
-            }));
-        }
-        setOperation(nextOperation);
         setFeedback(null);
+        setFormData({ id: "", nome: "", idade: "", areaInteresse: "" });
     }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -231,6 +230,7 @@ function App() {
                         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-900/5 sm:p-5">
                             <OperationTabs
                                 operation={operation}
+                                disabled={isSubmitting}
                                 onChange={changeOperation}
                             />
 
@@ -256,18 +256,28 @@ function App() {
                                         </p>
                                     )}
 
-                                <button
-                                    type="submit"
-                                    disabled={
-                                        isSubmitting ||
-                                        (operation === "UPDATE" && !canUpdate)
-                                    }
-                                    className={`mt-6 w-full rounded-xl px-5 py-3.5 font-black tracking-wide shadow-lg transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-wait disabled:opacity-60 ${actionButtonStyles[operation]}`}
-                                >
-                                    {isSubmitting
-                                        ? "Executando..."
-                                        : `Executar ${operation}`}
-                                </button>
+                                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                                    <button
+                                        type="submit"
+                                        disabled={
+                                            isSubmitting ||
+                                            (operation === "UPDATE" && !canUpdate)
+                                        }
+                                        className={`w-full rounded-xl px-5 py-3.5 font-black tracking-wide shadow-lg transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-wait disabled:opacity-60 sm:flex-1 ${actionButtonStyles[operation]}`}
+                                    >
+                                        {isSubmitting
+                                            ? "Executando..."
+                                            : `Executar ${operation}`}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={clearForm}
+                                        disabled={isSubmitting}
+                                        className="w-full rounded-xl border border-slate-300 bg-slate-100 px-5 py-3.5 font-bold text-slate-700 transition hover:bg-slate-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-wait disabled:opacity-60 sm:w-auto"
+                                    >
+                                        Limpar campos
+                                    </button>
+                                </div>
 
                                 {feedback && (
                                     <p

@@ -2,6 +2,7 @@ import type { Operation } from '../types/visitor'
 
 type OperationTabsProps = {
   operation: Operation
+  disabled: boolean
   onChange: (operation: Operation) => void
 }
 
@@ -34,7 +35,7 @@ const operations: Array<{
   },
 ]
 
-export function OperationTabs({ operation, onChange }: OperationTabsProps) {
+export function OperationTabs({ operation, disabled, onChange }: OperationTabsProps) {
   return (
     <div
       className="grid grid-cols-3 gap-2.5"
@@ -50,8 +51,9 @@ export function OperationTabs({ operation, onChange }: OperationTabsProps) {
             type="button"
             role="tab"
             aria-selected={isActive}
+            disabled={disabled}
             onClick={() => onChange(item.value)}
-            className={`min-w-0 rounded-xl border px-2 py-3 text-center transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 sm:px-3 ${
+            className={`min-w-0 rounded-xl border px-2 py-3 text-center transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-wait disabled:opacity-60 sm:px-3 ${
               isActive
                 ? `${item.activeClassName} -translate-y-0.5 shadow-lg`
                 : 'border-slate-200 bg-slate-50 text-slate-600 shadow-sm hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:text-slate-950 hover:shadow-md'
