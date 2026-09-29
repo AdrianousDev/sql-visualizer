@@ -28,7 +28,7 @@ export function SqlPreview({ sql }: SqlPreviewProps) {
                         </span>
                     </div>
 
-                    <pre className="flex-1 overflow-x-auto py-8 font-mono text-xl leading-10 sm:py-10 sm:text-2xl sm:leading-11 xl:text-3xl xl:leading-12">
+                    <pre className="flex-1 overflow-x-auto py-8 font-mono text-xl leading-10 sm:py-10 sm:text-2xl sm:leading-11 xl:text-2xl xl:leading-12">
                         <code>
                             {lines.map((line, index) => (
                                 <span

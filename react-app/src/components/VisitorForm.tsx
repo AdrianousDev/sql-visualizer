@@ -17,11 +17,7 @@ export function VisitorForm({
     return (
         <div className="grid gap-4 sm:grid-cols-2">
             {operation !== "INSERT" && (
-                <label
-                    className={`block text-sm font-bold text-slate-700 ${
-                        operation === "DELETE" ? "sm:col-span-2" : ""
-                    }`}
-                >
+                <label className="block text-sm font-bold text-slate-700 sm:col-span-2">
                     ID do visitante
                     <input
                         type="number"
@@ -63,6 +59,19 @@ export function VisitorForm({
                                 onChange("idade", event.target.value)
                             }
                             placeholder="20"
+                            className={inputClassName}
+                        />
+                    </label>
+
+                    <label className="block text-sm font-bold text-slate-700 sm:col-span-2">
+                        Área de interesse
+                        <input
+                            type="text"
+                            value={formData.areaInteresse}
+                            onChange={(event) =>
+                                onChange("areaInteresse", event.target.value)
+                            }
+                            placeholder="Tecnologia"
                             className={inputClassName}
                         />
                     </label>

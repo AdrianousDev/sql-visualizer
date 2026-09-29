@@ -28,6 +28,7 @@ function App() {
         id: "",
         nome: "",
         idade: "",
+        areaInteresse: "",
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,6 +51,7 @@ function App() {
         const id = Number(formData.id);
         const idade = Number(formData.idade);
         const nome = formData.nome.trim();
+        const areaInteresse = formData.areaInteresse.trim();
 
         if (operation !== "INSERT" && (!Number.isInteger(id) || id < 1)) {
             setFeedback({ type: "error", message: "Informe um ID válido." });
@@ -59,13 +61,15 @@ function App() {
         if (
             operation !== "DELETE" &&
             (nome === "" ||
+                areaInteresse === "" ||
                 formData.idade.trim() === "" ||
                 !Number.isInteger(idade) ||
                 idade < 0)
         ) {
             setFeedback({
                 type: "error",
-                message: "Informe um nome e uma idade válida.",
+                message:
+                    "Informe um nome, uma idade válida e uma área de interesse.",
             });
             return;
         }
@@ -74,14 +78,19 @@ function App() {
 
         try {
             if (operation === "INSERT") {
-                await createVisitor({ nome, idade });
-                setFormData((current) => ({ ...current, nome: "", idade: "" }));
+                await createVisitor({ nome, idade, areaInteresse });
+                setFormData((current) => ({
+                    ...current,
+                    nome: "",
+                    idade: "",
+                    areaInteresse: "",
+                }));
                 setFeedback({
                     type: "success",
                     message: "Visitante inserido com sucesso.",
                 });
             } else if (operation === "UPDATE") {
-                await updateVisitor(id, { nome, idade });
+                await updateVisitor(id, { nome, idade, areaInteresse });
                 setFeedback({
                     type: "success",
                     message: "Visitante atualizado com sucesso.",

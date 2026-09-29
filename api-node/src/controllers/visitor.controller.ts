@@ -4,6 +4,7 @@ import { prisma } from "../lib/prisma.js";
 type VisitorData = {
     nome: string;
     idade: number;
+    areaInteresse: string;
 };
 
 type VisitorParams = {
@@ -20,7 +21,7 @@ function parseVisitorData(body: unknown): VisitorData | null {
         return null;
     }
 
-    const { nome, idade } = body as Record<string, unknown>;
+    const { nome, idade, areaInteresse } = body as Record<string, unknown>;
 
     if (typeof nome !== "string" || nome.trim() === "") {
         return null;
@@ -30,9 +31,14 @@ function parseVisitorData(body: unknown): VisitorData | null {
         return null;
     }
 
+    if (typeof areaInteresse !== "string" || areaInteresse.trim() === "") {
+        return null;
+    }
+
     return {
         nome: nome.trim(),
         idade,
+        areaInteresse: areaInteresse.trim(),
     };
 }
 
@@ -50,7 +56,8 @@ export async function createVisitor(
 
     if (!data) {
         res.status(400).json({
-            message: "Nome e idade são obrigatórios e devem ser válidos.",
+            message:
+                "Nome, idade e área de interesse são obrigatórios e devem ser válidos.",
         });
         return;
     }
@@ -129,7 +136,8 @@ export async function updateVisitor(
 
     if (!data) {
         res.status(400).json({
-            message: "Nome e idade são obrigatórios e devem ser válidos.",
+            message:
+                "Nome, idade e área de interesse são obrigatórios e devem ser válidos.",
         });
         return;
     }

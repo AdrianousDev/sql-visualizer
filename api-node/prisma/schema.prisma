@@ -8,9 +8,10 @@ datasource db {
 }
 
 model Visitante {
-  id    Int    @id @default(autoincrement())
-  nome  String
-  idade Int
+  id            Int    @id @default(autoincrement())
+  nome          String
+  idade         Int
+  areaInteresse String @map("area_interesse")
 
   @@map("visitantes")
 }

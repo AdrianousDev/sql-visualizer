@@ -6,8 +6,8 @@ type VisitorsTableProps = {
 
 export function VisitorsTable({ visitors }: VisitorsTableProps) {
     return (
-        <div className="h-full min-h-0 overflow-hidden border border-slate-300 bg-white shadow-sm">
-            <table className="w-full table-fixed border-collapse text-left">
+        <div className="h-full min-h-0 overflow-auto border border-slate-300 bg-white shadow-sm">
+            <table className="w-full min-w-[42rem] table-fixed border-collapse text-left">
                 <thead className="bg-slate-800 text-slate-100">
                     <tr>
                         <th className="w-10 border-r border-slate-700 px-2 py-3 text-center font-mono text-xs font-medium text-slate-400 sm:w-12 sm:px-3">
@@ -29,12 +29,20 @@ export function VisitorsTable({ visitors }: VisitorsTableProps) {
                                 text
                             </span>
                         </th>
-                        <th className="w-20 px-2 py-3 sm:w-32 sm:px-5">
+                        <th className="w-20 border-r border-slate-700 px-2 py-3 sm:w-32 sm:px-5">
                             <span className="block font-mono text-sm font-bold">
                                 idade
                             </span>
                             <span className="mt-0.5 hidden font-mono text-[10px] font-medium uppercase tracking-wider text-slate-400 sm:block">
                                 integer
+                            </span>
+                        </th>
+                        <th className="px-2 py-3 sm:px-5">
+                            <span className="block font-mono text-sm font-bold">
+                                area_interesse
+                            </span>
+                            <span className="mt-0.5 hidden font-mono text-[10px] font-medium uppercase tracking-wider text-slate-400 sm:block">
+                                text
                             </span>
                         </th>
                     </tr>
@@ -54,8 +62,13 @@ export function VisitorsTable({ visitors }: VisitorsTableProps) {
                             <td className="truncate border-r border-b border-slate-200 px-2 py-5.25 font-medium text-slate-950 sm:px-5">
                                 <span title={visitor.nome}>{visitor.nome}</span>
                             </td>
-                            <td className="border-b border-slate-200 px-2 py-5.25 font-mono sm:px-5">
+                            <td className="border-r border-b border-slate-200 px-2 py-5.25 font-mono sm:px-5">
                                 {visitor.idade}
+                            </td>
+                            <td className="truncate border-b border-slate-200 px-2 py-5.25 font-medium text-slate-950 sm:px-5">
+                                <span title={visitor.areaInteresse}>
+                                    {visitor.areaInteresse}
+                                </span>
                             </td>
                         </tr>
                     ))}
