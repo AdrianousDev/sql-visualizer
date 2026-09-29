@@ -40,7 +40,8 @@ WHERE id = ${id};`;
 export function generateSelectSql(page: number, limit: number) {
     const offset = (page - 1) * limit;
 
-    return `SELECT id, nome, idade, area_interesse
+    return `SELECT
+    id, nome, idade, area_interesse
 FROM visitantes
 ORDER BY id
 LIMIT ${limit} OFFSET ${offset};`;

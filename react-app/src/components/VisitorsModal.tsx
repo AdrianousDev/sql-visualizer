@@ -87,7 +87,7 @@ export function VisitorsModal({ refreshKey, onClose }: VisitorsModalProps) {
                 if (event.target === event.currentTarget) onClose();
             }}
         >
-            <div className="flex h-[94dvh] w-full max-w-[95vw] flex-col overflow-hidden rounded-xl border border-slate-700 bg-slate-100 shadow-2xl shadow-black/50">
+            <div className="flex h-[94dvh] w-full max-w-[95vw] flex-col overflow-hidden rounded-xl border border-slate-700 bg-slate-100 shadow-2xl shadow-black/50 lg:max-w-[85vw]">
                 <VisitorsModalHeader
                     total={pagination.total}
                     isLoading={isLoading}
@@ -127,8 +127,8 @@ export function VisitorsModal({ refreshKey, onClose }: VisitorsModalProps) {
                         )}
                     </div>
 
-                    <div className="flex min-h-72 items-center border-t-4 border-blue-600 bg-[#070d18] p-4 sm:p-6 lg:min-h-0 lg:border-t-0 lg:border-l-4">
-                        <div className="h-full w-full">
+                    <div className="flex min-h-72 min-w-0 items-center justify-center border-t-4 border-blue-600 bg-[#070d18] p-4 sm:p-6 lg:min-h-0 lg:border-t-0 lg:border-l-4">
+                        <div className="min-w-0 w-full">
                             <VisitorsQueryPreview
                                 sql={generateSelectSql(page, PAGE_SIZE)}
                             />

@@ -12,7 +12,7 @@ export function VisitorsModalHeader({
     onClose,
 }: VisitorsModalHeaderProps) {
     return (
-        <header className="flex items-start justify-between border-b border-slate-700 bg-slate-900 px-5 py-4 text-white sm:px-7">
+        <header className="flex items-start justify-between gap-4 border-b border-slate-700 bg-slate-900 px-5 py-4 text-white sm:px-7">
             <div>
                 <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-blue-300">
                     PostgreSQL / public / visitantes
@@ -22,7 +22,7 @@ export function VisitorsModalHeader({
                     className="mt-1 text-xl font-bold text-white sm:text-2xl"
                 >
                     Dados da tabela{" "}
-                    <span className="font-mono text-cyan-300">visitantes</span>
+                    <span className="font-mono text-slate-200">visitantes</span>
                 </h2>
                 {!isLoading && !error && (
                     <p className="mt-1 text-sm text-slate-400">
@@ -35,9 +35,9 @@ export function VisitorsModalHeader({
                 type="button"
                 onClick={onClose}
                 aria-label="Fechar modal"
-                className="grid size-10 place-items-center rounded-lg border border-slate-600 bg-slate-800 text-2xl leading-none text-slate-300 transition hover:border-slate-500 hover:bg-slate-700 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+                className="rounded-lg border border-red-400 bg-red-800 px-3 py-2 font-bold text-white transition hover:border-red-300 hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300"
             >
-                ×
+                <span>Fechar</span>
             </button>
         </header>
     );
