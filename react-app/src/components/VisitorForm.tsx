@@ -3,6 +3,7 @@ import type { Operation, VisitorFormData } from "../types/visitor";
 type VisitorFormProps = {
     operation: Operation;
     formData: VisitorFormData;
+    disabled: boolean;
     onChange: (field: keyof VisitorFormData, value: string) => void;
 };
 
@@ -12,6 +13,7 @@ const inputClassName =
 export function VisitorForm({
     operation,
     formData,
+    disabled,
     onChange,
 }: VisitorFormProps) {
     return (
@@ -38,6 +40,7 @@ export function VisitorForm({
                         Nome
                         <input
                             type="text"
+                            disabled={disabled}
                             value={formData.nome}
                             onChange={(event) =>
                                 onChange("nome", event.target.value)
@@ -52,6 +55,7 @@ export function VisitorForm({
                         <input
                             type="number"
                             min="0"
+                            disabled={disabled}
                             step="1"
                             inputMode="numeric"
                             value={formData.idade}
@@ -67,6 +71,7 @@ export function VisitorForm({
                         Área de interesse
                         <input
                             type="text"
+                            disabled={disabled}
                             value={formData.areaInteresse}
                             onChange={(event) =>
                                 onChange("areaInteresse", event.target.value)

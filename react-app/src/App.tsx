@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { OperationTabs } from "./components/OperationTabs";
 import { SqlPreview } from "./components/SqlPreview";
 import { VisitorForm } from "./components/VisitorForm";
@@ -6,6 +6,7 @@ import { VisitorsModal } from "./components/VisitorsModal";
 import {
     createVisitor,
     deleteVisitor,
+    getVisitorById,
     updateVisitor,
 } from "./services/visitorService";
 import type { Operation, VisitorFormData } from "./types/visitor";
@@ -34,18 +35,93 @@ function App() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [feedback, setFeedback] = useState<Feedback | null>(null);
     const [visitorsVersion, setVisitorsVersion] = useState(0);
+    const [loadedVisitorId, setLoadedVisitorId] = useState<string | null>(null);
+    const [lookupError, setLookupError] = useState<string | null>(null);
+    const lookupController = useRef<AbortController | null>(null);
+    const visitorId = Number(formData.id);
+    const hasValidId =
+        formData.id.trim() !== "" && Number.isInteger(visitorId) && visitorId > 0;
+    const isLookingUp =
+        operation === "UPDATE" && hasValidId &&
+        loadedVisitorId !== formData.id && !lookupError;
+    const canUpdate =
+        hasValidId && loadedVisitorId === formData.id && !isLookingUp;
+    const lookupMessage =
+        formData.id !== "" && !hasValidId
+            ? "Informe um ID válido."
+            : lookupError;
+
+    useEffect(() => {
+        if (operation !== "UPDATE") return;
+
+        const id = Number(formData.id);
+        if (formData.id.trim() === "" || !Number.isInteger(id) || id < 1) {
+            return;
+        }
+
+        const controller = new AbortController();
+        lookupController.current = controller;
+
+        const timeout = setTimeout(async () => {
+            try {
+                const visitor = await getVisitorById(id, controller.signal);
+                if (controller.signal.aborted) return;
+
+                setFormData((current) => ({
+                    ...current,
+                    nome: visitor.nome,
+                    idade: String(visitor.idade),
+                    areaInteresse: visitor.areaInteresse,
+                }));
+                setLoadedVisitorId(formData.id);
+            } catch (error) {
+                if (controller.signal.aborted) return;
+                setLookupError(
+                    error instanceof Error
+                        ? error.message
+                        : "Não foi possível buscar o visitante.",
+                );
+            }
+        }, 300);
+
+        return () => {
+            clearTimeout(timeout);
+            controller.abort();
+        };
+    }, [operation, formData.id]);
 
     function updateFormField(field: keyof VisitorFormData, value: string) {
+        if (field === "id" && operation === "UPDATE" && value !== formData.id) {
+            lookupController.current?.abort();
+            setLoadedVisitorId(null);
+            setLookupError(null);
+            setFeedback(null);
+            setFormData({ id: value, nome: "", idade: "", areaInteresse: "" });
+            return;
+        }
         setFormData((current) => ({ ...current, [field]: value }));
     }
 
     function changeOperation(nextOperation: Operation) {
+        if (nextOperation === operation) return;
+        lookupController.current?.abort();
+        setLoadedVisitorId(null);
+        setLookupError(null);
+        if (nextOperation === "UPDATE") {
+            setFormData((current) => ({
+                ...current,
+                nome: "",
+                idade: "",
+                areaInteresse: "",
+            }));
+        }
         setOperation(nextOperation);
         setFeedback(null);
     }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
+        if (operation === "UPDATE" && !canUpdate) return;
         setFeedback(null);
 
         const id = Number(formData.id);
@@ -164,12 +240,28 @@ function App() {
                                 <VisitorForm
                                     operation={operation}
                                     formData={formData}
+                                    disabled={operation === "UPDATE" && !canUpdate}
                                     onChange={updateFormField}
                                 />
 
+                                {operation === "UPDATE" &&
+                                    (isLookingUp || lookupMessage) && (
+                                        <p
+                                            className="mt-4 text-sm text-slate-600"
+                                            role={lookupMessage ? "alert" : "status"}
+                                        >
+                                            {isLookingUp
+                                                ? "Buscando visitante..."
+                                                : lookupMessage}
+                                        </p>
+                                    )}
+
                                 <button
                                     type="submit"
-                                    disabled={isSubmitting}
+                                    disabled={
+                                        isSubmitting ||
+                                        (operation === "UPDATE" && !canUpdate)
+                                    }
                                     className={`mt-6 w-full rounded-xl px-5 py-3.5 font-black tracking-wide shadow-lg transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-wait disabled:opacity-60 ${actionButtonStyles[operation]}`}
                                 >
                                     {isSubmitting

@@ -122,6 +122,32 @@ export async function listVisitors(
     }
 }
 
+export async function getVisitorById(
+    req: Request<VisitorParams>,
+    res: Response,
+) {
+    const id = parseId(req.params.id);
+
+    if (!id) {
+        res.status(400).json({ message: "ID inválido." });
+        return;
+    }
+
+    try {
+        const visitor = await prisma.visitante.findUnique({ where: { id } });
+
+        if (!visitor) {
+            res.status(404).json({ message: "Visitante não encontrado." });
+            return;
+        }
+
+        res.status(200).json(visitor);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Erro inesperado ao buscar visitante." });
+    }
+}
+
 export async function updateVisitor(
     req: Request<VisitorParams, unknown, unknown>,
     res: Response,

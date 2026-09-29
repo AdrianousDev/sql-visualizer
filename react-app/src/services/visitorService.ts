@@ -60,6 +60,10 @@ export function updateVisitor(id: number, data: VisitorPayload) {
     });
 }
 
+export function getVisitorById(id: number, signal?: AbortSignal) {
+    return request<Visitor>(`${visitorsUrl}/${id}`, { signal });
+}
+
 export function deleteVisitor(id: number) {
     return request<void>(`${visitorsUrl}/${id}`, { method: "DELETE" });
 }
