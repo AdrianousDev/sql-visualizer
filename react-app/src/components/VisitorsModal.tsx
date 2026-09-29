@@ -13,7 +13,7 @@ type VisitorsModalProps = {
     onClose: () => void;
 };
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 8;
 
 const initialPagination: VisitorsResponse["pagination"] = {
     page: 1,
@@ -105,7 +105,10 @@ export function VisitorsModal({ refreshKey, onClose }: VisitorsModalProps) {
                                 setReloadKey((current) => current + 1)
                             }
                         >
-                            <VisitorsTable visitors={visitors} />
+                            <VisitorsTable
+                                visitors={visitors}
+                                pageSize={PAGE_SIZE}
+                            />
                         </VisitorsModalContent>
 
                         {!error && (

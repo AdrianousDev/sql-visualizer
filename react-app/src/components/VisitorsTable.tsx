@@ -2,13 +2,16 @@ import type { Visitor } from "../types/visitor";
 
 type VisitorsTableProps = {
     visitors: Visitor[];
+    pageSize: number;
 };
 
-export function VisitorsTable({ visitors }: VisitorsTableProps) {
+export function VisitorsTable({ visitors, pageSize }: VisitorsTableProps) {
+    const emptyRows = Math.max(0, pageSize - visitors.length);
+
     return (
         <div className="h-full min-h-0 overflow-auto border border-slate-300 bg-white shadow-sm">
-            <table className="w-full min-w-[42rem] table-fixed border-collapse text-left">
-                <thead className="bg-slate-800 text-slate-100">
+            <table className="h-full w-full min-w-2xl table-fixed border-collapse text-left">
+                <thead className="h-px bg-slate-800 text-slate-100">
                     <tr>
                         <th className="w-10 border-r border-slate-700 px-2 py-3 text-center font-mono text-xs font-medium text-slate-400 sm:w-12 sm:px-3">
                             #
@@ -47,28 +50,35 @@ export function VisitorsTable({ visitors }: VisitorsTableProps) {
                         </th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 text-slate-700">
+                <tbody className="text-slate-700">
                     {visitors.map((visitor, index) => (
                         <tr
                             key={visitor.id}
                             className="odd:bg-white even:bg-slate-50 hover:bg-blue-50"
                         >
-                            <td className="border-r border-b border-slate-200 px-2 py-5.25 text-center font-mono text-xs text-slate-400 sm:px-3">
+                            <td className="border-r border-b border-slate-200 px-2 text-center font-mono text-xs text-slate-400 sm:px-3">
                                 {index + 1}
                             </td>
-                            <td className="border-r border-b border-slate-200 px-2 py-5.25 font-mono font-semibold text-blue-700 sm:px-5">
+                            <td className="border-r border-b border-slate-200 px-2 font-mono font-semibold text-blue-700 sm:px-5">
                                 {visitor.id}
                             </td>
-                            <td className="truncate border-r border-b border-slate-200 px-2 py-5.25 font-medium text-slate-950 sm:px-5">
+                            <td className="truncate border-r border-b border-slate-200 px-2 font-medium text-slate-950 sm:px-5">
                                 <span title={visitor.nome}>{visitor.nome}</span>
                             </td>
-                            <td className="border-r border-b border-slate-200 px-2 py-5.25 font-mono sm:px-5">
+                            <td className="border-r border-b border-slate-200 px-2 font-mono sm:px-5">
                                 {visitor.idade}
                             </td>
-                            <td className="truncate border-b border-slate-200 px-2 py-5.25 font-medium text-slate-950 sm:px-5">
+                            <td className="truncate border-b border-slate-200 px-2 font-medium text-slate-950 sm:px-5">
                                 <span title={visitor.areaInteresse}>
                                     {visitor.areaInteresse}
                                 </span>
+                            </td>
+                        </tr>
+                    ))}
+                    {Array.from({ length: emptyRows }, (_, index) => (
+                        <tr key={`empty-${index}`} aria-hidden="true">
+                            <td colSpan={5} className="border-b border-transparent">
+                                <span className="invisible">&nbsp;</span>
                             </td>
                         </tr>
                     ))}
